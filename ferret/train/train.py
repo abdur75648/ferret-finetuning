@@ -709,6 +709,13 @@ class LazySupervisedDataset(Dataset):
             data_i['dataset'] = 'llava_instruct'
             data_i['image'] = os.path.join(image_folder, data_i['image'])
         return datas
+    
+    def load_supgeragi2k(self, data_path, image_folder):
+        datas = json.load(open(data_path, "r"))
+        for data_i in datas:
+            data_i['dataset'] = 'load_supgeragi2k'
+            data_i['image'] = os.path.join(image_folder, data_i['image'])
+        return datas
 
     def load_grounded_llava_boxes(self, data_path, image_folder):
         datas = json.load(open(data_path, "r"))
@@ -808,6 +815,9 @@ class LazySupervisedDataset(Dataset):
             elif 'cc3m_595k' in data_path_i:
                 logging.warning(f"Loading cc3m_595k data")
                 list_data_dict.append(self.load_cc3m(data_path_i, image_folder_i))
+            elif 'supgeragi2k' in data_path_i:
+                logging.warning(f"Loading supgeragi2k data")
+                list_data_dict.append(self.load_supgeragi2k(data_path_i, image_folder_i))
             else:
                 raise ValueError(f'{data_path_i} Not Supported.')
         
