@@ -1,61 +1,33 @@
-<!-- # Project Name
-
-This software project accompanies the research paper, [Paper title](https://arxiv.org).
-
-Brief description of the project.
-
-## Documentation
-
-## Getting Started  -->
-
 # <img src="figs/ferret_icon.png" alt="Alt text for the image" width="40" height="45"> Ferret: Refer and Ground Anything Anywhere at Any Granularity
 
 *An End-to-End MLLM that Accept Any-Form Referring and Ground Anything in Response.* [[Paper](https://arxiv.org/abs/2310.07704)]
 
-[Haoxuan You*](https://hxyou.github.io/), [Haotian Zhang*](https://haotian-zhang.github.io/), [Zhe Gan](https://zhegan27.github.io/), [Xianzhi Du](https://scholar.google.com/citations?user=l1hP40AAAAAJ&hl=en), [Bowen Zhang](https://zbwglory.github.io/), [Zirui Wang](https://www.cs.cmu.edu/~ziruiw/), [Liangliang Cao](http://llcao.net/), [Shih-Fu Chang](https://www.ee.columbia.edu/~sfchang/), [Yinfei Yang](https://sites.google.com/site/yinfeiyang/) 
-[*: equal contribution]
-
-
-## Overview
-
-<p align="center">
-    <img src="figs/ferret_fig_diagram_v2.png" width="100%"></a> <br>
-    Diagram of Ferret Model.
-</p>
-
-Key Contributions:
-* Ferret Model - **Hybrid Region Representation + Spatial-aware Visual Sampler** enable fine-grained and open-vocabulary referring and grounding in MLLM.
-* GRIT Dataset (~1.1M) - A **Large-scale, Hierarchical, Robust** ground-and-refer instruction tuning dataset.
-* Ferret-Bench - A multimodal evaluation benchmark that jointly requires **Referring/Grounding, Semantics, Knowledge, and Reasoning**.
-
-
-## Release
-- [12/14] 🔥 We released the [checkpoints(7B, 13B)](#checkpoints).
-- [10/30] 🔥 We released the code of **FERRET** model and [Ferret-Bench](ferret/eval/ferret_gpt4_data).
-
-
-
-**Usage and License Notices**: The data, and code is intended and licensed for research use only. They are also restricted to uses that follow the license agreement of LLaMA, Vicuna and GPT-4. The dataset is CC BY NC 4.0 (allowing only non-commercial use) and models trained using the dataset should not be used outside of research purposes. 
-
 ## Contents
-- [Install](#install)
-- [Train](#train)
-- [Evaluation](#evaluation)
+- [Setup](#setup)
+- [Finetune](#finetune)
 - [Demo](#demo)
 
-## Install
+## Setup
 
-1. Clone this repository and navigate to FERRET folder
+***Setting Up The RunPod Environment***
+
+1. Basic Installations
 ```bash
-git clone https://github.com/apple/ml-ferret
-cd ml-ferret
+apt-get update
+apt-get install zip unzip
+apt-get install git-lfs
+git lfs install
 ```
 
-2. Install Package
+2. Clone this repository and navigate to FERRET folder
+```bash
+git clone https://github.com/abdur75648/ferret-superagi
+cd ferret-superagi
+```
+
+2. Install Packages
 ```Shell
-conda create -n ferret python=3.10 -y
-conda activate ferret
-pip install --upgrade pip  # enable PEP 660 support
+pip install --upgrade pip
 pip install -e .
 pip install pycocotools
 pip install protobuf==3.20.0
@@ -64,56 +36,37 @@ pip install protobuf==3.20.0
 3. Install additional packages for training cases
 ```
 pip install ninja
-pip install flash-attn --no-build-isolation
+pip install tensorboard
+pip install flash-attn==1.0.7 --no-build-isolation
 ```
 
+## Finetune
 
-## Train
-
-FERRET is trained on 8 A100 GPUs with 80GB memory. To train on fewer GPUs, you can reduce the `per_device_train_batch_size` and increase the `gradient_accumulation_steps` accordingly. Always keep the global batch size the same: `per_device_train_batch_size` x `gradient_accumulation_steps` x `num_gpus`.
-
-### Hyperparameters
-We use a similar set of hyperparameters as LLaVA(Vicuna) in finetuning.  
-
-| Hyperparameter | Global Batch Size | Learning rate | Epochs | Max length | Weight decay |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| FERRET-7B | 128 | 2e-5 | 3 | 2048 | 0 |
-| FERRET-13B | 128 | 2e-5 | 3 | 2048 | 0 |
-
-### Prepare Vicuna checkpoint and LLaVA's projector
-
-Before you start, prepare our base model Vicuna, which is an instruction-tuned chatbot. Please download its weights following the instructions [here](https://github.com/lm-sys/FastChat#model-weights). Vicuna v1.3 is used in FERRET.
-
-Then download LLaVA's first-stage pre-trained projector weight ([7B](https://huggingface.co/liuhaotian/llava-336px-pretrain-vicuna-7b-v1.3), [13B](https://huggingface.co/liuhaotian/llava-336px-pretrain-vicuna-13b-v1.3)).
-
-
-### FERRET Training
-
-The scripts are provided ([7B](experiments/ferret_7b_train.sh), [13B](experiments/ferret_13b_train.sh)).
-
-
-## Evaluation
-
-Please see this [doc](EVAL.md) for the details.
-
-## Checkpoints
-We extracted the `delta` between our pre-trained model and Vicuna. Please first download weights of Vicuna following the [previous instruction](#prepare-vicuna-checkpoint-and-llavas-projector). Then download our prepared offsets of weights: [7B](https://docs-assets.developer.apple.com/ml-research/models/ferret/ferret-7b/ferret-7b-delta.zip), [13B](https://docs-assets.developer.apple.com/ml-research/models/ferret/ferret-13b/ferret-13b-delta.zip) using `wget` or `curl`, and unzip the downloaded offsets. Lastly, apply the offset to the Vicuna's weight by running the following script:
+1. Download and prepare pre-trained checkpoints
 ```Shell
-# 7B
-python3 -m ferret.model.apply_delta \
-    --base ./model/vicuna-7b-v1-3 \
-    --target ./model/ferret-7b-v1-3 \
-    --delta path/to/ferret-7b-delta
-# 13B
-python3 -m ferret.model.apply_delta \
-    --base ./model/vicuna-13b-v1-3 \
-    --target ./model/ferret-13b-v1-3 \
-    --delta path/to/ferret-13b-delta
+cd ferret/model/
+git clone https://huggingface.co/lmsys/vicuna-13b-v1.3
+cd vicuna-13b-v1.3 && git lfs pull && cd ..
+git clone https://huggingface.co/liuhaotian/llava-336px-pretrain-vicuna-13b-v1.3
+cd llava-336px-pretrain-vicuna-13b-v1.3 && git lfs pull && cd ..
+wget https://docs-assets.developer.apple.com/ml-research/models/ferret/ferret-13b/ferret-13b-delta.zip
+unzip ferret-13b-delta.zip
+cd ..
+python3 -m ferret.model.apply_delta --base ./model/vicuna-13b-v1.3 --target ./model/ferret-13b-v1-3 --delta ./model/ferret-13b-delta
+cd ..
 ```
 
-**Notices**: Apple's rights in the attached weight differentials are hereby licensed under the CC-BY-NC license. Apple makes no representations with regards to LLaMa or any other third party software, which are subject to their own terms.
+2. Download and prepare data
+* Put `supgeragi2k_annotations.json` in `dataset/` folder
+    * Can download sample json `llava_instruct_complex_reasoning_77k.json` from [here](https://huggingface.co/datasets/liuhaotian/LLaVA-Instruct-150K)
+* Put `supgeragi2k_images` in `dataset/` folder
+    * Can download sample coco-2014 images for above sample json from [here](http://images.cocodataset.org/zips/train2014.zip)
+    * Run `filter_coco.py` to filter images from coco-2014
 
-Please refer to the next section about how to set up a local demo with pre-trained weight.
+3. Run the fine-tuning script
+```bash
+bash finetune_13b.sh
+```
 
 ## Demo
 
@@ -134,7 +87,7 @@ python -m ferret.serve.gradio_web_server --controller http://localhost:10000 --m
 This is the worker that load the ckpt and do the inference on the GPU.  Each worker is responsible for a single model specified in `--model-path`.
 
 ```Shell
-CUDA_VISIBLE_DEVICES=0 python -m ferret.serve.model_worker --host 0.0.0.0 --controller http://localhost:10000 --port 40000 --worker http://localhost:40000 --model-path ./checkpoints/FERRET-13B-v0 --add_region_feature
+CUDA_VISIBLE_DEVICES=0 python -m ferret.serve.model_worker --host 0.0.0.0 --controller http://localhost:10000 --port 40000 --worker http://localhost:40000 --model-path ./checkpoints/ferret_13b --add_region_feature
 ```
 Wait until the process finishes loading the model and you see "Uvicorn running on ...".  Now, refresh your Gradio web UI, and you will see the model you just launched in the model list.
 
@@ -145,9 +98,8 @@ Wait until the process finishes loading the model and you see "Uvicorn running o
 </p>
 
 
-## Citation
-
-If you find Ferret useful, please cite using this BibTeX:
+## Reference
+Original code: [LLaVA](https://github.com/apple/ml-ferret)
 
 ```bibtex
 @article{you2023ferret,
