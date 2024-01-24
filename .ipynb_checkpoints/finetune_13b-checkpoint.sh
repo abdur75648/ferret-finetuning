@@ -55,8 +55,8 @@ PROMPT_VERSION=v1
 MODEL_VERSION="vicuna-13b-v1.3"
 ################## VICUNA ##################
 
-torchrun --nnodes=1 --nproc_per_node=2 --master_port=25001 \
-    ferret/train/train_mem.py \
+CUDA_AVAILABLE_DEVICES=0,1 \
+    python3 ferret/train/train_mem.py \
     --lora_enable False \
     --model_name_or_path ferret/model/$MODEL_VERSION \
     --version $PROMPT_VERSION \
