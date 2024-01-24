@@ -1,0 +1,6 @@
+**/__pycache__
+**/*.egg-info
+dataset/*
+ferret/model/*
+**/*.bin
+**/*.zip
