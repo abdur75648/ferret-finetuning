@@ -1,0 +1,78 @@
+[
+  {
+    "id": "000000033471",
+    "image": "000000033471.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What are the colors of the bus in the image?\n<image>"
+      },
+      {
+        "from": "gpt",
+        "value": "The bus in the image is white and red."
+      },
+      {
+        "from": "human",
+        "value": "What feature can be seen on the back of the bus?"
+      },
+      {
+        "from": "gpt",
+        "value": "The back of the bus features an advertisement."
+      },
+      {
+        "from": "human",
+        "value": "Is the bus driving down the street or pulled off to the side?"
+      },
+      {
+        "from": "gpt",
+        "value": "The bus is driving down the street, which is crowded with people and other vehicles."
+      }
+    ]
+  },
+  {
+    "id": "000000052846",
+    "image": "000000052846.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Where is the cat positioned in the image?\n<image>"
+      },
+      {
+        "from": "gpt",
+        "value": "The cat is positioned on top of the back of the couch in the living room."
+      },
+      {
+        "from": "human",
+        "value": "What is the cat doing in the image?"
+      },
+      {
+        "from": "gpt",
+        "value": "The cat is coming out from some curtains onto the couch and is sitting or standing on top of it."
+      },
+      {
+        "from": "human",
+        "value": "What is the color of the curtains near the cat?"
+      },
+      {
+        "from": "gpt",
+        "value": "The color of the curtains near the cat is red."
+      },
+      {
+        "from": "human",
+        "value": "Besides the cat, what else can be seen on the couch?"
+      },
+      {
+        "from": "gpt",
+        "value": "There are lots of pillows on the couch besides the cat."
+      },
+      {
+        "from": "human",
+        "value": "What kind of room does the couch appear to be in?"
+      },
+      {
+        "from": "gpt",
+        "value": "The couch appears to be in a living room setting."
+      }
+    ]
+  }
+]
