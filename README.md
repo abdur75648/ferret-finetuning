@@ -1,6 +1,6 @@
 # <img src="figs/ferret_icon.png" alt="Alt text for the image" width="40" height="45"> Ferret: Refer and Ground Anything Anywhere at Any Granularity
 
-*An End-to-End MLLM that Accept Any-Form Referring and Ground Anything in Response.* [[Paper](https://arxiv.org/abs/2310.07704)]
+*An End-to-End MLLM that Accept Any-Form Referring and Ground Anything in Response.* [[Paper](https://arxiv.org/abs/2310.07704)] [[Original Code](https://github.com/apple/ml-ferret/)]
 
 ## Contents
 - [Setup](#setup)
